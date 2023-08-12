@@ -1,10 +1,10 @@
 provider "aws" {
-  region = "us-east-1"
-  profile = "default"
+  region  = var.aws_region
+  profile = var.aws_profile
 }
 
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = var.vpc_cidr_block
 }
 
 resource "aws_internet_gateway" "igw" {
@@ -27,8 +27,8 @@ resource "aws_route_table_association" "public" {
 
 resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main.id
-  cidr_block              = "10.0.1.0/24"
-  availability_zone       = "us-east-1a" 
+  cidr_block              = var.subnet_cidr_block
+  availability_zone       = var.subnet_availability_zone
   map_public_ip_on_launch = true
 }
 
@@ -41,21 +41,21 @@ resource "aws_security_group" "web-server-sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.ssh_cidr_blocks
   }
 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.http_cidr_blocks
   }
 
   ingress {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.https_cidr_blocks
   }
 }
 
