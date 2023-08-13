@@ -1,5 +1,5 @@
 variable "aws_region" {
-  description = "The AWS region where resources will be created."
+  description = "The AWS region prefered."
   default     = "us-east-1"
 }
 
